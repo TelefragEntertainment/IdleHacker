@@ -25,9 +25,22 @@ class Header{
 		ctx.fillText('Idle Hacker', 1, 1);
 		
 		//Detail
-		ctx.font = Math.round(0.025 * width) + 'pt "Norm"';
+		ctx.font = Math.round(0.025 * width) + 'pt "BTC"';
 		ctx.fillStyle = 'rgba(100,255,100,0.5)';
-		ctx.fillText('฿ ' + btc.toFixed(8), this.x + (width * 0.6), this.y + (width * 0.035));
+		var btcOutput = btc.toFixed(8).replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
+		if(btc > 100000000000){
+			btcOutput= btc.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		else if(btc > 1000000000){
+			btcOutput= btc.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		else if(btc > 10000000){
+			btcOutput= btc.toFixed(4).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		else if(btc > 100000){
+			btcOutput= btc.toFixed(6).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		ctx.fillText('฿ ' + btcOutput, this.x + (width * 0.62), this.y + (width * 0.04));
 		
 		
 		this.detail = "TELEFRAG ENTERTAINMENT ";
@@ -45,6 +58,6 @@ class Header{
 		ctx.fillText(s.substring(0,12), this.x + (width * 0.6), this.y);
 		
 		ctx.fillStyle = 'rgba(100,255,100,.7)';
-		ctx.fillText("==================================================", 0, this.y + (width * 0.068));
+		ctx.fillText("======================================================================", 0, this.y + (width * 0.068));
 	}
 }

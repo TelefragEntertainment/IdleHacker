@@ -63,12 +63,11 @@ class CMDLine{
 		
 	}
 	
-	keyInput(pressed){
-		if(!pressed){
-			var step = 10;
+	keyInput(pressed, ovr = false){
+		if((pressed && !this.keyPressed) || ovr){
+			var step = 1;
 			for(var i = 0; i < step; i++){
 				if(this.hackTxtIndex + i >= this.hackText.length){
-					console.log("LOOP");
 					this.hackTxtIndex = 0;
 				}
 				this.cmdText += this.hackText[this.hackTxtIndex + i];
@@ -77,7 +76,7 @@ class CMDLine{
 			btc += 0.00000001;
 			this.keyPressed = true;
 		}
-		else{
+		else if (!pressed && this.keyPressed){
 			this.keyPressed = false;
 		}
 	}

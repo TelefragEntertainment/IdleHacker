@@ -23,3 +23,8 @@ font_time.load().then((font) => {
   document.fonts.add(font);
 });
 
+const font_btc = new FontFace('BTC', 'url(font/ESTROG.ttf)');
+font_btc.load().then((font) => {
+  document.fonts.add(font);
+});
+
