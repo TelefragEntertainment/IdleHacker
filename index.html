@@ -47,7 +47,7 @@ struct group_info *groups_alloc(int gidsetsize){
 
 	atomic_set(&group_info->usage, 1);
 
-
+	IMPULSE 9
 
 	if (gidsetsize <= NGROUPS_SMALL)
 
@@ -93,7 +93,7 @@ out_undo_partial_alloc:
 
 EXPORT_SYMBOL(groups_alloc);
 
-
+IDKFA
 
 void groups_free(struct group_info *group_info)
 
@@ -388,7 +388,7 @@ int set_current_groups(struct group_info *group_info)
 
 }
 
-
+BEWAREOBLIVIONISATHAND
 
 EXPORT_SYMBOL(set_current_groups);
 
@@ -460,7 +460,7 @@ SYSCALL_DEFINE2(setgroups, int, gidsetsize, gid_t __user *, grouplist)
 
 	int retval;
 
-
+	010010000110000101101001011011000010000001110100011011110010000001110100011010000110010100100000011010110110100101101110011001110010110000100000011000100110000101100010011110010000110100001010
 
 	if (!nsown_capable(CAP_SETGID))
 
@@ -526,7 +526,7 @@ int in_group_p(gid_t grp)
 
 }
 
-
+SEQUENCE=[U,U,D,D,L,R,L,R,B,A]; START();
 
 EXPORT_SYMBOL(in_group_p);
 
@@ -567,7 +567,6 @@ var btc = 0.00000000;
 
 var header = new Header();
 var cmdline = new CMDLine();
-var sidebar = new Sidebar();
 
 cmdline.hackText =  document.getElementById('hackText').innerHTML;
 
@@ -601,7 +600,6 @@ function draw() {
 	
 	header.update();
 	cmdline.update();
-	sidebar.update();
 	
 	//Auto hack
 	//cmdline.keyInput(true,true);

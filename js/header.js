@@ -6,13 +6,14 @@ class Header{
 		this.detailOffset = 0;
 		this.detailOffsetDelay = 10;
 		this.detailDelta = 0;
-
+		this.flashTime = 0;
 	}
 
 	update(){
 		if(Math.random() > 0.9){
 			this.logoOffset = Math.random() * 4;
 		}
+		this.flashTime *= 0.5;
 		this.draw();
 	}
 	
@@ -22,11 +23,18 @@ class Header{
 		ctx.fillStyle = 'rgba(100,255,100,.3)';
 		ctx.fillText('Idle Hacker', this.x + this.logoOffset, this.y + this.logoOffset);
 		ctx.fillStyle = 'green';
-		ctx.fillText('Idle Hacker', 1, 1);
+		ctx.fillText('Idle Hacker', 5, 5);
 		
 		//Detail
-		ctx.font = Math.round(0.025 * width) + 'pt "BTC"';
-		ctx.fillStyle = 'rgba(100,255,100,0.5)';
+		
+		if(this.flashTime > 0.1){
+			ctx.font = Math.round(0.021 * width) + 'pt "BTC"';
+			ctx.fillStyle = 'rgba(164, 255, 164, 0.83)';
+		}
+		else{
+			ctx.font = Math.round(0.02 * width) + 'pt "BTC"';
+			ctx.fillStyle = 'rgba(100,255,100,0.5)';
+		}
 		var btcOutput = btc.toFixed(8).replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
 		if(btc > 100000000000){
 			btcOutput= btc.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -59,5 +67,9 @@ class Header{
 		
 		ctx.fillStyle = 'rgba(100,255,100,.7)';
 		ctx.fillText("======================================================================", 0, this.y + (width * 0.068));
+	}
+
+	flash(){
+		this.flashTime = 1;
 	}
 }

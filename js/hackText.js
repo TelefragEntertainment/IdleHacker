@@ -1,6 +1,6 @@
 class hackText{
 	hackText = ''+
-	'struct group_info init_groups = { .usage = ATOMIC_INIT(2) };\
+	'THIS IS A TEST struct group_info init_groups = { .usage = ATOMIC_INIT(2) };\
 	\
 	struct group_info *groups_alloc(int gidsetsize){\
 	\
