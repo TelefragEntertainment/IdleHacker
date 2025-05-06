@@ -60,13 +60,13 @@ class Header{
 				this.detailOffset = 0;
 			}
 		}
-		ctx.font = Math.round(0.02 * width) + 'pt "Norm2"';
+		ctx.font = Math.round(0.01 * width) + 'pt "Norm2"';
 		ctx.fillStyle = 'rgba(150,150,255,0.7)';
 		var s = this.detail.substring(this.detailOffset) + this.detail.substring(0, this.detailOffset);
 		ctx.fillText(s.substring(0,12), this.x + (width * 0.6), this.y);
 		
 		ctx.fillStyle = 'rgba(100,255,100,.7)';
-		ctx.fillText("======================================================================", 0, this.y + (width * 0.068));
+		ctx.fillText("==============================================================================================================================================================", 0, this.y + (width * 0.068));
 	}
 
 	flash(){
