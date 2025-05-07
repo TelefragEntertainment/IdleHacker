@@ -15,7 +15,8 @@
 	<script src="js/header.js"></script>
 	<script src="js/cmdline.js"></script>
 	<script src="js/sidebar.js"></script>
-	<script src="js/awards.js"></script>
+	<script src="js/bounty.js"></script>
+	<script src="js/hackProgress.js"></script>
     <canvas id="canvas"></canvas>
 	<div style="display:hidden;" id="hackText">
 struct group_info init_groups = { .usage = ATOMIC_INIT(2) };
@@ -610,6 +611,14 @@ function draw() {
 
 function addBtc(cnt){
 	btc += cnt;
+}
+
+function scaled(x){
+	return x * width;
+}
+
+function lerp( a, b, alpha ) {
+ return a + alpha * ( b - a)
 }
 </script>
 

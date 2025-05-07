@@ -1,9 +1,13 @@
 class CMDLine{
 	constructor(){
 		this.x = 0.01;
-		this.y = 0.10;
-		this.w = 0.75;
-		this.h = 0.5;
+		this.y = 0.05;
+		this.w = 0.98;
+		this.h = 0.75;
+		this.targetx = this.x;  // For animating changes
+		this.targety = this.y;
+		this.targetw = this.w;
+		this.targeth = this.h;
 		this.cursorDelay = 0;
 		this.cursor = '|';
 		this.hackText = "test";
@@ -42,14 +46,22 @@ class CMDLine{
 				this.shake = 0;
 			}
 		}
-		ctx.fillStyle = 'rgb(5, 5, 10)';
-		ctx.fillRect(this.x * width + Math.random() * this.shake, this.y * width + Math.random() * this.shake, this.w * width + Math.random() * this.shake, this.h * height);
-		ctx.fillStyle = 'rgb(1, 50, 1)';
-		ctx.fillRect(this.x * width + Math.random() * this.shake, this.y * width + Math.random() * this.shake, this.w * width + Math.random() * this.shake, this.h * 0.05 * height);
+
+		this.x = lerp(this.x, this.targetx, 0.2);
+		this.y = lerp(this.y, this.targety, 0.2);
+		this.w = lerp(this.w, this.targetw, 0.2);
+		this.h = lerp(this.h, this.targeth, 0.2);
+
+
 		ctx.lineWidth = 2;
 		ctx.strokeStyle = 'rgb(25, 100, 25)';
-		ctx.strokeRect(this.x * width+ Math.random() * this.shake, this.y * width+ Math.random() * this.shake, this.w * width, this.h * 0.05 * height);
+		ctx.strokeRect(scaled(this.x)+ Math.random() * this.shake, scaled(this.y)+ Math.random() * this.shake, scaled(this.w), this.h * 0.05 * height);
 		ctx.lineWidth = 0;
+		ctx.fillStyle = 'rgb(5, 5, 10)';
+		ctx.fillRect(scaled(this.x) + Math.random() * this.shake, scaled(this.y) + Math.random() * this.shake, scaled(this.w) + Math.random() * this.shake, this.h * height);
+		ctx.fillStyle = 'rgb(1, 50, 1)';
+		ctx.fillRect(scaled(this.x) + Math.random() * this.shake, scaled(this.y) + Math.random() * this.shake, scaled(this.w) + Math.random() * this.shake, this.h * 0.05 * height);
+		
 		this.cursorDelay -= deltaTime;
 		if(this.cursorDelay <= 0){
 			this.cursor = this.cursor == '|' ? '' : '|';
@@ -68,24 +80,35 @@ class CMDLine{
 				t += this.cursor;
 			}
 			//Clear first line.
-			if(y > (this.h * height) - 50){
+			if(y > (scaled(this.h)) - 50){
 				this.cmdText = this.cmdText.substring(line1.length, this.cmdText.length - line1.length);
 				break;
 			}
 			//Split into multiple lines
-			else if(ctx.measureText(t).width + 30 > this.w * width || s[i] == ';' || s[i] == '{' || s[i] == '};'){
+			else if(ctx.measureText(t).width + 30 > scaled(this.w) || s[i] == ';' || s[i] == '{' || s[i] == '};'){
 				if(y == 0){
 					line1 = t;
 				}
-				ctx.fillText(t,(this.x * width) + 15+ Math.random() * this.shake, (this.y * width) + y + (this.y * width * 0.2)+ Math.random() * this.shake);
+				ctx.fillText(t,(scaled(this.x)) + 15+ Math.random() * this.shake, (scaled(this.y)) + y + (scaled(this.y) * 0.25)+ Math.random() * this.shake);
 				t = "";
 				y+=25;
 			}
 			else{
-				ctx.fillText(t,(this.x * width) + 15+ Math.random() * this.shake, (this.y * width) + y + (this.y * width * 0.2)+ Math.random() * this.shake);
+				ctx.fillText(t,(scaled(this.x)) + 15+ Math.random() * this.shake, (scaled(this.y)) + y + (scaled(this.y) * 0.25)+ Math.random() * this.shake);
 			}
 		}
 		
+	}
+
+	setTargetSize(x,y,w,h){
+		if(x >= 0)
+			this.targetx = x;
+		if(y >= 0)
+			this.targety = y;
+		if(w >= 0)
+			this.targetw = w;
+		if(h >= 0)
+			this.targeth = h;
 	}
 	
 	keyInput(pressed, ovr = false){
@@ -98,14 +121,10 @@ class CMDLine{
 				this.cmdText += this.hackText[this.hackTxtIndex + i];
 			}
 			this.hackTxtIndex += step;
-			btc += 0.00000001 * this.upg_hackMulti;
+			btc += 0.000000001 * this.upg_hackMulti;
 			this.keyPressed = true;
 			this.shake += 1;
 			header.flash();
-
-			if(Math.random() > 0.5){
-				bounty.addBounty(bountyList[Math.floor(Math.random() * bountyList.length)], "X", Math.random() * 100)
-			}
 		}
 		else if (!pressed && this.keyPressed){
 			this.keyPressed = false;
