@@ -565,7 +565,7 @@ var height;
 
 var deltaTIme = 0;
 
-var btc = 0.00000000;
+var btc = 0.000000001;
 
 var header = new Header();
 var cmdline = new CMDLine();
@@ -601,9 +601,10 @@ function draw() {
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	ctx.textBaseline = "top"
 	
-	header.update();
 	cmdline.update();
+	header.update();
 	bounty.update();
+	cmdline.keyClicked = false;
 	
 	//Auto hack
 	//cmdline.keyInput(true,true);

@@ -9,17 +9,17 @@ class AwardList{
 		this.targety = 0.05;
 		this.targetw = 0.325;
 		this.targeth = 0.75;
-        this.bounties = [new Bounty("load(bounty_program)", "", 0)];
+        this.bounties = [];
         
         this.eventTriggers = [];
 
         //Add bounty list
         this.eventTriggers.push(new EventTrigger( 
             function(){
-                if(btc >= 0.00000001){
+                if(btc >= 0.000000001){
                     cmdline.setTargetSize(-1,-1,0.625,-1);
                     bounty.enabled = true;
-                    bounty.addBounty(targets[Math.floor(Math.random() * targets.length)], 1000, Math.floor(Math.random() * 100));
+                    bounty.addBounty(targets[Math.floor(Math.random() * targets.length)], 25, 13);
                     return true;
                 }
                 return false;
@@ -27,9 +27,19 @@ class AwardList{
     }
 	
 	update(){
-        if(cmdline.keyPressed){
+        if(cmdline.keyClicked){
             for(let x = 0; x < this.bounties.length; x++){
-                this.bounties[x].progress++;
+                if(this.bounties[x].progress < this.bounties[x].maxProgress){
+                    this.bounties[x].progress++;
+                    if(this.bounties[x].progress >= this.bounties[x].maxProgress){
+                        this.bounties[x].progress = this.bounties[x].maxProgress;
+                        btc *= this.bounties[x].reward;
+                        cmdline.shake += 10;
+			            header.flash();
+                        this.bounties.splice(0,1);
+                        this.addBounty(targets[Math.floor(Math.random() * targets.length)], Math.floor(btc * 1000000000), 1.2);
+                    }
+                }
             }
         }
         this.checkEvents();

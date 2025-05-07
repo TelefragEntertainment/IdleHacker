@@ -14,6 +14,7 @@ class CMDLine{
 		this.hackTxtIndex = 0;
 		this.cmdText = "Init hack protocol: 0-1.x/ready...;";
 		this.keyPressed = false;
+		this.keyClicked = false;  // Cleared in index.html after used
 		this.shake = 0;
 		this.upg_hackMulti = 1;  // x hacks per hack
 		this.upg_autoHackLevel = 0;  // Level of autohack upgrade
@@ -121,10 +122,11 @@ class CMDLine{
 				this.cmdText += this.hackText[this.hackTxtIndex + i];
 			}
 			this.hackTxtIndex += step;
-			btc += 0.000000001 * this.upg_hackMulti;
+			//btc += 0.000000001 * this.upg_hackMulti;
 			this.keyPressed = true;
-			this.shake += 1;
-			header.flash();
+			this.keyClicked = true;
+			//this.shake += 1;
+			//header.flash();
 		}
 		else if (!pressed && this.keyPressed){
 			this.keyPressed = false;
