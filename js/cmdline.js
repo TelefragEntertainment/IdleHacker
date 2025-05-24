@@ -16,8 +16,8 @@ class CMDLine{
 		this.keyPressed = false;
 		this.keyClicked = false;  // Cleared in index.html after used
 		this.shake = 0;
-		this.upg_hackMulti = 51;  // x hacks per hack
-		this.upg_autoHackLevel = 5;  // Level of autohack upgrade
+		this.upg_hackMulti = 1;  // x hacks per hack
+		this.upg_autoHackLevel = 0;  // Level of autohack upgrade
 		this.upg_autoHackBonus = 0.0005;  // Added to autohackvalue per update, hack rewarded for 1+
 		this.autoHackValue = 0;
 		this.charsTyped = 0;	// Total characters typed
