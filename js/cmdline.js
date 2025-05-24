@@ -11,15 +11,16 @@ class CMDLine{
 		this.cursorDelay = 0;
 		this.cursor = '|';
 		this.hackText = "test";
-		this.hackTxtIndex = 0;
+		this.hackTxtIndex = Math.floor(Math.random() * 1000);
 		this.cmdText = "Init hack protocol: 0-1.x/ready...;";
 		this.keyPressed = false;
 		this.keyClicked = false;  // Cleared in index.html after used
 		this.shake = 0;
-		this.upg_hackMulti = 1;  // x hacks per hack
-		this.upg_autoHackLevel = 0;  // Level of autohack upgrade
+		this.upg_hackMulti = 51;  // x hacks per hack
+		this.upg_autoHackLevel = 5;  // Level of autohack upgrade
 		this.upg_autoHackBonus = 0.0005;  // Added to autohackvalue per update, hack rewarded for 1+
 		this.autoHackValue = 0;
+		this.charsTyped = 0;	// Total characters typed
 	}
 	
 	update(){
@@ -81,18 +82,18 @@ class CMDLine{
 				t += this.cursor;
 			}
 			//Clear first line.
-			if(y > (scaled(this.h)) - 50){
+			if(y > this.h * height - 50){
 				this.cmdText = this.cmdText.substring(line1.length, this.cmdText.length - line1.length);
 				break;
 			}
 			//Split into multiple lines
-			else if(ctx.measureText(t).width + 30 > scaled(this.w) || s[i] == ';' || s[i] == '{' || s[i] == '};'){
+			else if(ctx.measureText(t).width + 30 > scaled(this.w) || s[i] == ';' || s[i] == '{' || s[i] == '};' || s[i]=='*/' || s[i] =='‎' || s[i]=='\n'){
 				if(y == 0){
 					line1 = t;
 				}
 				ctx.fillText(t,(scaled(this.x)) + 15+ Math.random() * this.shake, (scaled(this.y)) + y + (scaled(this.y) * 0.25)+ Math.random() * this.shake);
 				t = "";
-				y+=25;
+				y+=15;
 			}
 			else{
 				ctx.fillText(t,(scaled(this.x)) + 15+ Math.random() * this.shake, (scaled(this.y)) + y + (scaled(this.y) * 0.25)+ Math.random() * this.shake);
@@ -122,6 +123,7 @@ class CMDLine{
 				this.cmdText += this.hackText[this.hackTxtIndex + i];
 			}
 			this.hackTxtIndex += step;
+			this.charsTyped += this.upg_hackMulti;
 			//btc += 0.000000001 * this.upg_hackMulti;
 			this.keyPressed = true;
 			this.keyClicked = true;

@@ -10,13 +10,14 @@ class AwardList{
 		this.targetw = 0.325;
 		this.targeth = 0.75;
         this.bounties = [];
+        this.completed = [];
         
         this.eventTriggers = [];
 
         //Add bounty list
         this.eventTriggers.push(new EventTrigger( 
             function(){
-                if(btc >= 0.000000001){
+                if(cmdline.charsTyped >= 100){
                     cmdline.setTargetSize(-1,-1,0.625,-1);
                     bounty.enabled = true;
                     bounty.addBounty(targets[Math.floor(Math.random() * targets.length)], 25, 13);
@@ -33,9 +34,11 @@ class AwardList{
                     this.bounties[x].progress++;
                     if(this.bounties[x].progress >= this.bounties[x].maxProgress){
                         this.bounties[x].progress = this.bounties[x].maxProgress;
-                        btc *= this.bounties[x].reward;
+                        var earned = btc * this.bounties[x].reward;
+                        btc += earned;
                         cmdline.shake += 10;
 			            header.flash();
+                        this.completed.unshift(this.bounties[0].title + earned + " \n");
                         this.bounties.splice(0,1);
                         this.addBounty(targets[Math.floor(Math.random() * targets.length)], Math.floor(btc * 1000000000), 1.2);
                     }
@@ -80,10 +83,11 @@ class AwardList{
                 ctx.font = Math.round(0.025 * height) + 'pt "CMD"';
                 var fills = "[";
                 var perc = this.bounties[i].progress / this.bounties[i].maxProgress;
-                for(let x = 0; x < Math.floor(perc * 30); x++){
+                var cnt = width/45;
+                for(let x = 0; x < Math.floor(perc * cnt); x++){
                     fills += "#";
                 }
-                fills = fills.padEnd(30,"_");
+                fills = fills.padEnd(cnt,"_");
                 fills += "]" + ` (${Math.floor(perc * 100)}%)`;
                 var s = `ACTIVE TARGETS \n \n ${this.bounties[i].title} \n \n ${fills}`;
                 space += splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space * width * 0.004, scaled(this.w) - 5)
@@ -99,6 +103,15 @@ class AwardList{
             // space += splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space * width * 0.004, scaled(this.w) - 5)
             //ctx.fillText(this.bounties[i].title,scaled(this.x) + 5, (scaled(this.y)) + (i - (this.bounties.length -1)) * width * -0.02);
         }
+
+        // Completed bounties
+        ctx.fillStyle = 'rgb(176, 105, 0)';
+        ctx.font = Math.round(0.02 * height) + 'pt "CMD"';
+        var s = ""
+        for(let i = 0; i < Math.min(this.completed.length,10); i++){
+            s += this.completed[i] + " \n";
+        }
+        space += splitText(ctx, s, scaled(this.x) + 1, scaled(this.y) + 100,scaled(this.w) - 1);
     }
 
     addBounty(title, detail, reward){
@@ -302,4 +315,5 @@ targets = [
     "Columbia University's Climate Research Center",
     "University of Tokyo's Robotics Lab",
     "Seoul National University's Cybersecurity Research Center",
+    "Nakatomi Plaze 30th Floor Vault"
 ]
