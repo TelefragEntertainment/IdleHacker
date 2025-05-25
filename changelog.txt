@@ -1,0 +1,13 @@
+ _____ _____  _      ______   _    _          _____ _  ________ _____  
+|_   _|  __ \| |    |  ____| | |  | |   /\   / ____| |/ /  ____|  __ \ 
+  | | | |  | | |    | |__    | |__| |  /  \ | |    | ' /| |__  | |__) |
+  | | | |  | | |    |  __|   |  __  | / /\ \| |    |  < |  __| |  _  / 
+ _| |_| |__| | |____| |____  | |  | |/ ____ \ |____| . \| |____| | \ \ 
+|_____|_____/|______|______| |_|  |_/_/    \_\_____|_|\_\______|_|  \_\
+========================================================================
+
+- 5/24/2025
+Added the changelog to Idle Hacker.
+Added bounty list to show completed hacks and earnings from completing. 
+  - TODO: Format earnings to show earned sats until it makes sense to display earned Bitcoin, 
+    getting rid of exponent notation.
