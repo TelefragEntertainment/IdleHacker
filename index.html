@@ -13,11 +13,13 @@
   </head>
   <body">
 	<script src="js/load.js"></script>
+	<script src="js/hudElement.js"></script>
 	<script src="js/header.js"></script>
 	<script src="js/cmdline.js"></script>
 	<script src="js/sidebar.js"></script>
 	<script src="js/bounty.js"></script>
 	<script src="js/hackProgress.js"></script>
+	<script src="js/upgradeMenu.js"></script>
     <canvas id="canvas"></canvas>
 	<div style="display:hidden;" id="hackText">
 struct group_info init_groups = { .usage = ATOMIC_INIT(2) };
@@ -29,12 +31,12 @@ struct group_info *groups_alloc(int gidsetsize){
 
 	Initializing 1337 Protocol...  
 	Connecting to Target Server: 192.168.1.1  
-	Bypassing Firewall... [███████████]  
-	Decrypting Security Keys... [███████████]  
+	Bypassing Firewall... [▇▇▇▇▇▇▇▇▇▇▇]  
+	Decrypting Security Keys... [▇▇▇▇▇▇▇▇▇▇▇]  
 	Access Granted!  
-	Downloading Sensitive Data... [███████████]   
+	Downloading Sensitive Data... [▇▇▇▇▇▇▇▇▇▇▇]   
 	Transfer Complete.   
-	Injecting Malware... [███████████] 
+	Injecting Malware... [▇▇▇▇▇▇▇▇▇▇▇] 
 	System Compromised.  
 	Logging Out...  
 
@@ -70,6 +72,11 @@ out_undo_partial_alloc:
 }
 EXPORT_SYMBOL(groups_alloc);
 IDKFA();
+
+Unwrap(HOTPOCKET) [▇▇▇▇▇▇▇▇]
+Apply(CRISP_SLEEVE) [▇▇▇▇▇▇▇▇]
+Run(3) [▇▇▇▇▇▇▇▇]
+Consume()
 
 void groups_free(struct group_info *group_info)
 {
@@ -119,12 +126,12 @@ while(!false == true && Time.now() > 0)
 	return 0;
 }
 
-Filling bars..  
-[███████████]   
-[███████████]   
-[███████████]   
-[███████████]	 
-[████OK█████]   
+Filling bars..
+[▇▇▇▇▇▇▇▇▇▇▇]
+[▇▇▇▇▇▇▇▇▇▇▇]
+[▇▇▇▇▇▇▇▇▇▇▇]
+[▇▇▇▇▇▇▇▇▇▇▇]
+[▇▇▇▇OK▇▇▇▇▇]
 
 /* a simple Shell sort */
 static void groups_sort(struct group_info *group_info)
@@ -164,7 +171,7 @@ int groups_search(const struct group_info *group_info, gid_t grp)
 	unsigned int left, right;
 	if (!group_info)
 		return 0;
-	Cycling Flux Capacitor to 1.21GW... [█████████████████████] 
+	Cycling Flux Capacitor to 1.21GW... [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇] 
 	left = 0;
 	right = group_info->ngroups;
 
@@ -250,7 +257,7 @@ out:
 	return i;
 }
 
-Reticulating Splines... [████████████████████████████████] 
+Reticulating Splines... [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇]
 
 /*
  *	SMP: Our groups are copy-on-write. We can set them safely
@@ -291,7 +298,7 @@ int in_group_p(gid_t grp)
 {
 	const struct cred *cred = current_cred();
 	int retval = 1;
-	Downloading a car... [██████████████████] 
+	Downloading a car... [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇] 
 	if (grp != cred->fsgid)
 		retval = groups_search(cred->group_info, grp);
 	return retval;
@@ -306,6 +313,44 @@ int in_egroup_p(gid_t grp)
 		retval = groups_search(cred->group_info, grp);
 	return retval;
 }
+
+> INITIATING PROTOCOL: BLACKFANG_7.3
+> Establishing secure uplink... [OK]
+> Spoofing MAC address... [00:1A:2B:3C:4D:5E] [OK]
+> Injecting ghost packets... ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 100%
+> Bypassing firewall... [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇] SUCCESS
+> Accessing node: 192.168.47.22... [CONNECTED]
+> Elevating privileges... sudo exploit.sh --force
+> Root access granted. Welcome, Agent_Zero.
+
+> Scanning internal network...
+  - Node 01: 192.168.47.1 [ACTIVE]
+  - Node 02: 192.168.47.22 [BREACHED]
+  - Node 03: 192.168.47.45 [LOCKED]
+  - Node 04: 192.168.47.77 [VULNERABLE]
+
+> Deploying payload: WRAITH.EXE
+> Encrypting logs... [▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇] DONE
+> Disabling security daemons... [OK]
+> Extracting credentials...
+  - admin: ********
+  - sys_root: ********
+  - vault_key: ********
+
+> Initiating data siphon...
+  - /vault/finance/2025_q2_reports.csv [DOWNLOADED]
+  - /vault/clients/top_secret.db [DOWNLOADED]
+  - /vault/ai_research/omega_proto.ai [DOWNLOADED]
+
+> Injecting backdoor: /usr/bin/phantom_portal
+> Setting cron job: @reboot /usr/bin/phantom_portal
+> Obfuscating traces... [COMPLETE]
+> Disconnecting from host... [TERMINATED]
+
+> MISSION STATUS: SUCCESS
+> TIME ELAPSED: 00:02:47
+> LOGGING OUT...
+
 </div>
 <div class="changelog"><a href="./changelog.txt"target="_bank">Changelog</a></div>
 </body>
@@ -325,6 +370,7 @@ var btc = 0.000000001;
 var header = new Header();
 var cmdline = new CMDLine();
 var bounty = new AwardList();
+var upgrades = new upgradeMenu();
 
 cmdline.hackText =  document.getElementById('hackText').innerHTML;
 
@@ -358,7 +404,9 @@ function draw() {
 	
 	cmdline.update();
 	header.update();
+	upgrades.update();
 	bounty.update();
+	
 	cmdline.keyClicked = false;
 	
 	//Auto hack
@@ -369,8 +417,9 @@ function addBtc(cnt){
 	btc += cnt;
 }
 
-function scaled(x){
-	return x * width;
+// Scales by width or height of canvas
+function scaled(x, h = false){
+	return x * (h ? height : width);
 }
 
 function lerp( a, b, alpha ) {

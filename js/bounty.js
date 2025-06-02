@@ -1,5 +1,6 @@
-class AwardList{
+class AwardList extends hudElement{
 	constructor(){
+        super();
         this.enabled = false;
 		this.x = 0.65;
 		this.y = -1;
@@ -8,19 +9,40 @@ class AwardList{
         this.targetx = this.x;  // For animating changes
 		this.targety = 0.05;
 		this.targetw = 0.325;
-		this.targeth = 0.75;
+		this.targeth = 0.35;
         this.bounties = [];
         this.completed = [];
-        
         this.eventTriggers = [];
+        this.colTitle = 'rgb(181, 89, 164)';
+        this.colTarget = 'rgb(87, 232, 94)';
+        this.colTerminated = 'rgb(48, 129, 99)';
+        this.colFlash = 'rgb(255,255,255)';
+        this.flashTextAngle = 0;
+        this.hackedText = [
+            "ʕっ•ᴥ•ʔっ",
+            "HACKED! :(",
+            "( ͡° ᴥ ͡°)﻿"
+        ]
 
         //Add bounty list
         this.eventTriggers.push(new EventTrigger( 
             function(){
                 if(cmdline.charsTyped >= 100){
+                    console.log("Bounty unlocked");
                     cmdline.setTargetSize(-1,-1,0.625,-1);
                     bounty.enabled = true;
-                    bounty.addBounty(targets[Math.floor(Math.random() * targets.length)], 25, 13);
+                    bounty.addBounty(targets[Math.floor(Math.random() * targets.length)], cmdline.bountyMinDifficulty, 0.000000001);
+                    return true;
+                }
+                return false;
+            }));
+        // First upgrade: Autohack 1
+        this.eventTriggers.push(new EventTrigger( 
+            function(){
+                if(btc > 0.000000005){
+                    console.log("Upgrades unlocked");
+                    bounty.setTargetSize(-1,-1,-1,0.375);
+                    upgrades.enabled = true;
                     return true;
                 }
                 return false;
@@ -28,26 +50,48 @@ class AwardList{
     }
 	
 	update(){
+        super.update();
         if(cmdline.keyClicked){
             for(let x = 0; x < this.bounties.length; x++){
                 if(this.bounties[x].progress < this.bounties[x].maxProgress){
                     this.bounties[x].progress++;
+                    // Bounty completed
                     if(this.bounties[x].progress >= this.bounties[x].maxProgress){
                         this.bounties[x].progress = this.bounties[x].maxProgress;
-                        var earned = btc * this.bounties[x].reward;
+                        var earned = this.bounties[x].reward;
                         btc += earned;
                         cmdline.shake += 10;
 			            header.flash();
-                        this.completed.unshift(this.bounties[0].title + earned + " \n");
+                        this.flashBG();
+                        this.completed.unshift(this.bounties[0].title + ": \n " + earned.toFixed(9).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")  + " \n");
                         this.bounties.splice(0,1);
-                        this.addBounty(targets[Math.floor(Math.random() * targets.length)], Math.floor(btc * 1000000000), 1.2);
+                        this.addBounty(targets[Math.floor(Math.random() * targets.length)], 
+                            Math.max(Math.floor(btc * 1000000000) * cmdline.bountyDifficultyMulti, cmdline.bountyMinDifficulty), 
+                            cmdline.bountyRewardBase * cmdline.bountyRewardScale);
                     }
                 }
             }
         }
         this.checkEvents();
-		this.draw();
+		//this.draw();
 	}
+
+    flashBG(){
+        super.flashBG();
+        this.flashTextAngle = -25 * Math.PI / 180;
+    }
+
+    flash(){
+        super.flash();
+        if(this.flashTime <= 0) return;
+        ctx.save();
+        ctx.translate(scaled(this.x + this.w/4) , scaled(this.y + this.h/5, true));
+        ctx.rotate(this.flashTextAngle);
+        ctx.fillStyle = `rgb(255, 55, 55, ${this.flashTime/this.flashTimeReset * 0.95})`;
+        ctx.font = '50pt "CMD"';
+        ctx.fillText(this.hackedText[ Math.floor( Math.random() * this.hackedText.length)],0,0);
+        ctx.restore();
+    }
 
     checkEvents(){
         for(let i=0; i < this.eventTriggers.length; i++){
@@ -59,17 +103,13 @@ class AwardList{
     }
 
     draw(){
-        if(!this.enabled) return;
+        super.draw();
 
-        this.x = lerp(this.x, this.targetx, 0.05);
-		this.y = lerp(this.y, this.targety, 0.05);
-		this.w = lerp(this.w, this.targetw, 0.05);
-		this.h = lerp(this.h, this.targeth, 0.05);
-
+        // Background
         ctx.fillStyle = 'rgb(9, 8, 15)';
-		ctx.fillRect(scaled(this.x) - 4, scaled(this.y) -4, scaled(this.w)+8, this.h * height+8);
+		ctx.fillRect(scaled(this.x) - 4, scaled(this.y) -4, scaled(this.w)+8, scaled(this.h,true) + 8);
         ctx.fillStyle = 'rgb(19, 19, 33)';
-		ctx.fillRect(scaled(this.x), scaled(this.y) , scaled(this.w), this.h * height);
+		ctx.fillRect(scaled(this.x), scaled(this.y) , scaled(this.w), scaled(this.h,true));
         ctx.fillStyle = 'rgb(127, 255, 15)';
         ctx.font = Math.round(0.02 * height) + 'pt "CMD"';
         var space = 0;
@@ -89,45 +129,49 @@ class AwardList{
                 }
                 fills = fills.padEnd(cnt,"_");
                 fills += "]" + ` (${Math.floor(perc * 100)}%)`;
-                var s = `ACTIVE TARGETS \n \n ${this.bounties[i].title} \n \n ${fills}`;
-                space += splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space * width * 0.004, scaled(this.w) - 5)
+                var s = `${this.bounties[i].title} \n \n ${fills}`;
+                space += super.splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space + 10, scaled(this.w) - 5)
+                // Title
+                ctx.fillStyle = this.colTitle;
+                super.splitText(ctx, "Active Target:", scaled(this.x) + 5, scaled(this.y) - 5,scaled(this.w) - 1);
             }
             else{
                 // ctx.fillStyle = 'rgb(99, 132, 71)';
                 // ctx.font = Math.round(0.0175 * height) + 'pt "CMD"';
                 // var s = `${new Date(this.bounties[i].time).toLocaleTimeString("en-US")} : ${this.bounties[i].detail} \n ${this.bounties[i].title}`;
-                // space += splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space * width * 0.004, scaled(this.w) - 5)
+                // space += super.splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space * width * 0.004, scaled(this.w) - 5)
             
             }
             // var s = `${new Date(this.bounties[i].time).toLocaleTimeString("en-US")} : ${this.bounties[i].detail} \n ${this.bounties[i].title}`;
-            // space += splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space * width * 0.004, scaled(this.w) - 5)
+            // space += super.splitText(ctx, s, scaled(this.x) + 5, (scaled(this.y)) + ((i - (this.bounties.length -1)) * width * -0.02) + space * width * 0.004, scaled(this.w) - 5)
             //ctx.fillText(this.bounties[i].title,scaled(this.x) + 5, (scaled(this.y)) + (i - (this.bounties.length -1)) * width * -0.02);
         }
 
         // Completed bounties
-        ctx.fillStyle = 'rgb(176, 105, 0)';
+        ctx.font = Math.round(0.025 * height) + 'pt "CMD"';
+        ctx.fillStyle = this.colTitle;
+        super.splitText(ctx, "TERMINATED:", scaled(this.x) + 5, scaled(this.y) + 70,scaled(this.w) - 1);
         ctx.font = Math.round(0.02 * height) + 'pt "CMD"';
+        ctx.fillStyle = 'rgb(118, 84, 32)';
         var s = ""
-        for(let i = 0; i < Math.min(this.completed.length,10); i++){
-            s += this.completed[i] + " \n";
+        for(let i = 0; i < Math.min(this.completed.length,4); i++){
+            s += this.completed[i] + " \n ";
         }
-        space += splitText(ctx, s, scaled(this.x) + 1, scaled(this.y) + 100,scaled(this.w) - 1);
+        space += super.splitText(ctx, s, scaled(this.x) + 5, scaled(this.y) + 90,scaled(this.w) - 1);
+        
+        ctx.fillStyle = 'rgb(211, 169, 107)';
+        s = ""
+        for(let i = 0; i < Math.min(this.completed.length,1); i++){
+            s += this.completed[i] + " \n ";
+        }
+        space += super.splitText(ctx, s, scaled(this.x) + 1, scaled(this.y) + 90,scaled(this.w) - 1);
     }
 
     addBounty(title, detail, reward){
         this.bounties.push(new Bounty(title, detail, reward));
     }
 
-    setTargetSize(x,y,w,h){
-		if(x >= 0)
-			this.targetx = x;
-		if(y >= 0)
-			this.targety = y;
-		if(w >= 0)
-			this.targetw = w;
-		if(h >= 0)
-			this.targeth = h;
-	}
+    
 }
 
 class Bounty{
@@ -146,34 +190,7 @@ class EventTrigger{
         this.checkCondition = conditionEval;
         this.onConditionMet = onConditionMet;
     }
-}
-
-function splitText(ctx, text, x, y, maxWidth) {
-    const words = text.split(' ');
-    let line = '';
-    let lines = [];
-    let lineHeight = ctx.measureText('M').width * 1.25; // Approximate line height
-    
-    words.forEach(word => {
-        let testLine = line + word + ' ';
-        let testWidth = ctx.measureText(testLine).width;
-        
-        if (word == "\n" || (testWidth > maxWidth && line.length) > 0) {
-            lines.push(line);
-            line = word + '';
-        } else {
-            line = testLine;
-    }
-    });
-    
-    lines.push(line); // Add the last line
-        
-    lines.forEach((line, index) => {
-        ctx.fillText(line, x, y + index * lineHeight);
-    });
-        return lines.length;
-}
-    
+}    
 
 bountyList = ["Fastest Typist: Broke the world record for typing speed while coding a complex algorithm in under a minute.",
     "Master of Encryption: Developed an unbreakable encryption method that even the most advanced quantum computers couldn't crack.",
@@ -317,3 +334,4 @@ targets = [
     "Seoul National University's Cybersecurity Research Center",
     "Nakatomi Plaze 30th Floor Vault"
 ]
+

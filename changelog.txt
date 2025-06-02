@@ -6,6 +6,25 @@
 |_____|_____/|______|______| |_|  |_/_/    \_\_____|_|\_\______|_|  \_\
 ========================================================================
 
+TODO:
+
+- Terminal scrolling bug, erases and skips around lines.
+- Font scaling
+
+Changelog:
+
+- 6/1/2025
+Fixed hudElements scaling.
+
+- 5/28/2025
+Changed terminal progress bar character to take up less vertical space.
+Began refactoring hudElements to utilize base class.
+
+- 5/27/2025
+Bounties completed format updated.
+Added variables for controlling bounty rate of reward/difficulty. 
+Added more hacker text to the console.
+
 - 5/24/2025
 Added the changelog to Idle Hacker.
 Added bounty list to show completed hacks and earnings from completing. 

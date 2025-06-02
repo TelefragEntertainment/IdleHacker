@@ -1,5 +1,6 @@
-class CMDLine{
+class CMDLine extends hudElement{
 	constructor(){
+		super();
 		this.x = 0.01;
 		this.y = 0.05;
 		this.w = 0.98;
@@ -16,14 +17,19 @@ class CMDLine{
 		this.keyPressed = false;
 		this.keyClicked = false;  // Cleared in index.html after used
 		this.shake = 0;
-		this.upg_hackMulti = 1;  // x hacks per hack
-		this.upg_autoHackLevel = 0;  // Level of autohack upgrade
-		this.upg_autoHackBonus = 0.0005;  // Added to autohackvalue per update, hack rewarded for 1+
+		this.upg_hackMulti = 1;  // x hacks per hack (1)
+		this.upg_autoHackLevel = 0;  // Level of autohack upgrade (0)
+		this.upg_autoHackBonus = 0.0005;  // Added to autohackvalue per update, hack rewarded for 1+ (0.0005)
 		this.autoHackValue = 0;
 		this.charsTyped = 0;	// Total characters typed
+		this.bountyDifficultyMulti = 0.5;	// Amount to scale bounty difficulty (0.5)
+		this.bountyMinDifficulty = 20; // (20)
+		this.bountyRewardBase = 0.000000001; //(0.000000001)
+		this.bountyRewardScale = 1;	// Amount to scale bounty reward (1)
 	}
 	
 	update(){
+		if(!document.hasFocus()) return;
 		this.autoHack();
 		this.draw();
 	}
@@ -100,17 +106,6 @@ class CMDLine{
 			}
 		}
 		
-	}
-
-	setTargetSize(x,y,w,h){
-		if(x >= 0)
-			this.targetx = x;
-		if(y >= 0)
-			this.targety = y;
-		if(w >= 0)
-			this.targetw = w;
-		if(h >= 0)
-			this.targeth = h;
 	}
 	
 	keyInput(pressed, ovr = false){

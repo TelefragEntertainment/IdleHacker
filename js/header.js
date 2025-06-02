@@ -50,7 +50,7 @@ class Header{
 			ctx.fillStyle = 'rgba(100,255,100,0.5)';
 		}
 		ctx.textAlign = "center";
-		ctx.fillText('฿ ' + btcOutput, this.x + (width * 0.86), 5);
+		ctx.fillText('₿ ' + btcOutput, this.x + (width * 0.86), 5);
 		ctx.textAlign = "left";
 		//ctx.font = Math.round(0.01 * width) + 'pt "Norm2"';
 		//ctx.fillStyle = 'rgba(150,150,255,0.7)';
